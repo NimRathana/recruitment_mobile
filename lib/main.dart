@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:recruitment_mobile/shared/constants.dart';
 import 'package:recruitment_mobile/storage/storage_keys.dart';
+import 'package:recruitment_mobile/views/bottom_navigation/settings_view.dart';
 import 'bindings/auth_binding.dart';
 import 'controllers/setting_controller.dart';
 import 'translate/AppTranslations.dart';
@@ -34,13 +35,15 @@ class MyApp extends StatelessWidget {
     final SettingController settingController = Get.find();
     final isDark = settingController.isDarkMode.value ?? false;
     final selectedColor = settingController.selectedColor.value;
+    final selectedLang = settingController.selectedLanguage.value;
+    final selectedLocale = SettingsView.languages.firstWhere((lang) => lang['name'] == selectedLang, orElse: () => {'locale': Locale('en', 'US')})['locale'] as Locale;
     return Obx(() {
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         initialBinding: AuthBinding(),
         initialRoute: firstPage,
         translations: AppTranslations(),
-        locale: const Locale('en', 'US'),
+        locale: selectedLocale,
         fallbackLocale: const Locale('en', 'US'),
         themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
         theme: lightTheme(selectedColor),

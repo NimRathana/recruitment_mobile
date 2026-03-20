@@ -2,9 +2,9 @@ import 'package:flag/flag.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controllers/auth_controller.dart';
 import '../../controllers/setting_controller.dart';
 import '../../routes/app_routes.dart';
+import '../../utils/helper.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -214,8 +214,6 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Widget _buildLogoutTile(BuildContext context) {
-    final authController = Get.find<AuthController>();
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       clipBehavior: Clip.antiAlias,
@@ -241,30 +239,7 @@ class _SettingsViewState extends State<SettingsView> {
         ),
         title: Text("logout".tr, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, color: Colors.white)),
         onTap: () {
-          Get.defaultDialog(
-            radius: 10,
-            contentPadding: const EdgeInsets.all(20),
-            titlePadding: const EdgeInsets.only(top: 20),
-            title: "logout".tr,
-            titleStyle: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-            content: Text("logout_confirmation".tr, style: Get.textTheme.bodyMedium),
-            cancel: ElevatedButton(
-              onPressed: () async {
-                authController.logout();
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-              child: Center(
-                child: Text("logout".tr, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Colors.white)),
-              ),
-            ),
-            confirm: ElevatedButton(
-              onPressed: () {
-                Get.back();
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).focusColor),
-              child: Center(child: Text("cancel".tr, style: Theme.of(context).textTheme.labelMedium)),
-            ),
-          );
+          Helper.showLogoutDialog(context);
         },
       ),
     );

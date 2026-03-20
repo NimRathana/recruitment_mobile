@@ -9,12 +9,14 @@ import 'package:recruitment_mobile/utils/helper.dart';
 class NavItem {
   final String title;
   final IconData icon;
-  final Widget page;
+  final Widget? page;
+  final VoidCallback? onTap;
 
   const NavItem({
     required this.title,
     required this.icon,
-    required this.page,
+    this.page,
+    this.onTap,
   });
 }
 
@@ -24,7 +26,7 @@ class HomeView extends StatelessWidget {
   final controller = Get.find<AuthController>();
   final _sidebarController = SidebarXController(selectedIndex: 0, extended: true);
   final RxInt _selectedIndex = 0.obs;
-  final List<NavItem> navItems = [
+  final List<NavItem> sidebarItems = [
     NavItem(
       title: "Dashboard",
       icon: Icons.dashboard_rounded,
@@ -36,20 +38,28 @@ class HomeView extends StatelessWidget {
       page: _ProfilePage(),
     ),
     NavItem(
-      title: "Settings",
+      title: "Setting",
       icon: Icons.settings_rounded,
       page: SettingsView(),
     ),
+    NavItem(
+      title: "logout",
+      icon: Icons.logout,
+      onTap: (){
+        Helper.showLogoutDialog(Get.context!);
+      }
+    ),
   ];
+  late final List<NavItem> bottomNavItems = sidebarItems.take(3).toList();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: Obx(() => Helper.sampleAppBar(navItems[_selectedIndex.value].title, context, null)),
+        child: Obx(() => Helper.sampleAppBar(bottomNavItems[_selectedIndex.value].title.tr, context, null)),
       ),
-      body: Obx(() => navItems[_selectedIndex.value].page),
+      body: Obx(() => sidebarItems[_selectedIndex.value].page!),
       drawer: _buildSidebar(context),
       bottomNavigationBar: Obx(() => BottomNavigationBar(
         currentIndex: _selectedIndex.value,
@@ -57,10 +67,10 @@ class HomeView extends StatelessWidget {
           _selectedIndex.value = index;
           _sidebarController.selectIndex(index);
         },
-        items: navItems.map((item) {
+        items: bottomNavItems.map((item) {
           return BottomNavigationBarItem(
             icon: Icon(item.icon),
-            label: item.title,
+            label: item.title.tr,
           );
         }).toList(),
       ),
@@ -78,15 +88,43 @@ class HomeView extends StatelessWidget {
       headerBuilder: (context, extended) => _buildSidebarHeader(extended),
       headerDivider: Divider(color: Get.theme.dividerColor),
       footerDivider: Divider(color: Get.theme.dividerColor),
-      items: navItems.asMap().entries.map((entry) {
+      items: sidebarItems.asMap().entries.map((entry) {
         final index = entry.key;
         final item = entry.value;
+        final isLogout = item.title.toLowerCase() == "logout";
+
         return SidebarXItem(
           icon: item.icon,
-          label: item.title.tr,
+          label: isLogout ? null : item.title.tr,
+          selectable: !isLogout,
+          iconBuilder: isLogout ? (selected, hovered) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              width: _sidebarController.extended ? 230 : 60,
+              decoration: BoxDecoration(
+                color: Colors.red.withAlpha((0.5 * 255).toInt()),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.exit_to_app_rounded, color: Colors.white70),
+                  if (_sidebarController.extended) ...[
+                    const SizedBox(width: 20),
+                    Text('logout'.tr, style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
+                  ],
+                ],
+              ),
+            );
+          } : null,
           onTap: () {
-            _selectedIndex.value = index;
-            _sidebarController.selectIndex(index);
+            if (item.page != null) {
+              _selectedIndex.value = index;
+              _sidebarController.selectIndex(index);
+            }
+            if (item.onTap != null) {
+              item.onTap!();
+            }
           },
         );
       }).toList(),
@@ -173,11 +211,13 @@ SidebarXTheme getSidebarXStyle(BuildContext context, {bool extended = false}) {
       color: isDark ? discordDarkLabel : const Color(0xFF4E5058),
       fontSize: 14 * scale,
     ),
-    itemPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    // itemPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     itemTextPadding: const EdgeInsets.only(left: 20),
 
     // --- Selected Style ---
+    // selectedItemMargin: EdgeInsets.symmetric(horizontal: 0),
     selectedTextStyle: TextStyle(color: Colors.teal, fontWeight: FontWeight.bold, fontSize: 14 * scale),
+    // selectedItemPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     selectedItemTextPadding: const EdgeInsets.only(left: 20),
     selectedIconTheme: const IconThemeData(size: 24, color: Colors.teal),
     selectedItemDecoration: BoxDecoration(
