@@ -234,7 +234,7 @@ class _SettingsViewState extends State<SettingsView> {
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Get.theme.cardColor.withAlpha((0.2 * 255).toInt()),
+            color: Colors.white.withAlpha((0.1 * 255).toInt()),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(Icons.logout_sharp, color: Colors.white, size: 20),

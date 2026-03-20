@@ -56,7 +56,7 @@ ThemeData lightTheme([Color? primaryColor]) {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: adjustColor(discordLightDeep, contrast, saturation),
+      fillColor: discordLightDeep,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       hintStyle: TextStyle(
         color: discordLightHint,
@@ -132,7 +132,7 @@ ThemeData darkTheme([Color? primaryColor]) {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: adjustColor(discordDarkDeep, contrast, saturation),
+      fillColor: discordDarkDeep,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       hintStyle: TextStyle(
         color: discordDarkHint,

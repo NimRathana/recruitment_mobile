@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Helper {
-  static AppBar sampleAppBar(String title,BuildContext context, String? logoImg, {VoidCallback? onLogoTap}) {
+  static AppBar sampleAppBar(String title, BuildContext context, String? logoImg, {VoidCallback? onLogoTap}) {
     return AppBar(
       title: Text(title, style: Theme.of(context).textTheme.titleMedium),
+      centerTitle: true,
       actions: [
         if (logoImg != null)
           Padding(
