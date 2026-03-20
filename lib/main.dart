@@ -36,9 +36,7 @@ class MyApp extends StatelessWidget {
       return GetMaterialApp(
         title: 'Recruitment App',
         debugShowCheckedModeBanner: false,
-        // ✅ Remove MaterialApp → use GetMaterialApp
         initialBinding: AuthBinding(),
-        // ✅ Start from login
         initialRoute: firstPage,
         translations: AppTranslations(),
         locale: const Locale('en', 'US'),
@@ -47,14 +45,8 @@ class MyApp extends StatelessWidget {
         theme: lightTheme(selectedColor),
         darkTheme: darkTheme(selectedColor),
         getPages: [
-          GetPage(
-            name: Routes.login,
-            page: () => LoginView(),
-          ),
-          GetPage(
-            name: Routes.home,
-            page: () => HomeView(),
-          ),
+          GetPage(name: Routes.login, page: () => LoginView()),
+          GetPage(name: Routes.home, page: () => HomeView()),
           GetPage(name: Routes.appearance, page: () => AppearanceView()),
         ],
       );

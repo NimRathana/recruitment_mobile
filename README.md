@@ -1,16 +1,43 @@
-# recruitment_mobile
-
-A new Flutter project.
-
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+===== CHANGE THESE VALUES =====
 
-A few resources to get you started if this is your first Flutter project:
+$oldName = "modern_app"
+$newName = "new_project_name"
+$appName = "New App Name"
+$packageName = "com.rathana.modernapp"
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+===== INSTALL TOOLS =====
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+dart pub add rename
+dart pub add change_app_package_name
+
+===== CHANGE APP NAME =====
+
+dart run rename setAppName --value "$appName"
+
+===== CHANGE PACKAGE NAME =====
+
+dart run change_app_package_name:main $packageName
+
+===== CHANGE pubspec.yaml NAME =====
+
+(Get-Content pubspec.yaml) -replace "name: $oldName", "name: $newName" | Set-Content pubspec.yaml
+
+===== UPDATE ALL IMPORTS =====
+
+Get-ChildItem -Recurse -Include *.dart,*.yaml,*.c,*.h,*.cpp,*.rc,*.plist,*.swift,*.mm | ForEach-Object {
+    (Get-Content $_.FullName) -replace 'recruitment_mobile', 'Modern App' | Set-Content $_.FullName
+}
+
+===== RENAME PROJECT FOLDER =====
+
+cd ..
+Rename-Item $oldName $newName
+cd $newName
+
+===== CLEAN PROJECT =====
+
+flutter clean
+flutter pub get
+flutter run
