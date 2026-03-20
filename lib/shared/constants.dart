@@ -24,7 +24,7 @@ final saturation = settingController.saturation.value;
 
 ThemeData lightTheme([Color? primaryColor]) {
   final baseTextTheme = defaultTextTheme();
-  final Color primary = settingController.box.hasData(StorageKeys.selectedColor) ? settingController.selectedColor.value : lightSurface;
+  final Color primaryLight = settingController.box.hasData(StorageKeys.selectedColor) ? settingController.selectedColor.value : lightBg;
 
   return ThemeData(
     useMaterial3: true,
@@ -49,7 +49,7 @@ ThemeData lightTheme([Color? primaryColor]) {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: adjustColor(primary, contrast, saturation),
+        backgroundColor: adjustColor(primaryLight, contrast, saturation),
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -87,7 +87,7 @@ ThemeData lightTheme([Color? primaryColor]) {
 
 ThemeData darkTheme([Color? primaryColor]) {
   final baseTextTheme = defaultTextTheme();
-  final Color primary = settingController.box.hasData(StorageKeys.selectedColor) ? settingController.selectedColor.value.withAlpha(100) : discordDarkSurface;
+  final Color primaryDark = settingController.box.hasData(StorageKeys.selectedColor) ? settingController.selectedColor.value.withAlpha(100) : discordDarkBg;
 
   return ThemeData(
     useMaterial3: true,
@@ -125,7 +125,7 @@ ThemeData darkTheme([Color? primaryColor]) {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: adjustColor(primary, contrast, saturation),
+        backgroundColor: adjustColor(primaryDark, contrast, saturation),
         foregroundColor: Colors.white,
         elevation: 0,
       ),

@@ -1,26 +1,38 @@
+import 'package:flag/flag.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../controllers/auth_controller.dart';
 import '../../controllers/setting_controller.dart';
 import '../../routes/app_routes.dart';
 
-class SettingsView extends StatelessWidget {
+class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
+  static final languages = [
+    {'nameKey': 'khmer', 'name': 'Khmer', 'code': FlagsCode.KH, 'locale': Locale('km', 'KH')},
+    {'nameKey': 'english', 'name': 'English', 'code': FlagsCode.US, 'locale': Locale('en', 'US')},
+    {'nameKey': 'french', 'name': 'French', 'code': FlagsCode.FR, 'locale': Locale('fr', 'FR')},
+  ];
+
+  @override
+  State<SettingsView> createState() => _SettingsViewState();
+}
+
+class _SettingsViewState extends State<SettingsView> {
+  final settingController = Get.find<SettingController>();
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<SettingController>();
-
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 24, 20, 120),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildProfileHeader(context, controller),
+            _buildProfileHeader(context, settingController),
             const SizedBox(height: 32),
 
-            _buildSectionTitle(context, "Appearance"),
+            _buildSectionTitle(context, "App Setting"),
             _buildCard(context, [
               _buildTile(
                 context,
@@ -30,12 +42,11 @@ class SettingsView extends StatelessWidget {
                 trailing: Obx(() => Transform.scale(
                   scale: 0.8,
                   child: CupertinoSwitch(
-                    value: controller.isDarkMode.value ?? Get.isDarkMode,
+                    value: settingController.isDarkMode.value ?? Get.isDarkMode,
                     activeTrackColor: Theme.of(context).colorScheme.primary,
-                    // Background logic: Deep Discord grey when OFF
                     inactiveTrackColor: Theme.of(context).brightness == Brightness.dark ? const Color(0xFF1E1F22) : Colors.black12,
                     onChanged: (bool value) {
-                      controller.toggleTheme(value);
+                      settingController.toggleTheme(value);
                     },
                   ),
                 )),
@@ -47,6 +58,24 @@ class SettingsView extends StatelessWidget {
                 subtitle: "Indigo (Default)",
                 onTap: () {
                   Get.toNamed(Routes.appearance);
+                },
+              ),
+              _buildTile(
+                context,
+                icon: Icons.language_outlined,
+                title: "Language",
+                subtitle: "English (Default)",
+                onTap: () {
+                  showLanguageBottomSheet();
+                },
+              ),
+              _buildTile(
+                context,
+                icon: Icons.cleaning_services_outlined,
+                title: "Clear Cache",
+                subtitle: "Remove temporary files",
+                onTap: () {
+                  showClearCacheBottomSheet();
                 },
               ),
             ]),
@@ -77,6 +106,10 @@ class SettingsView extends StatelessWidget {
                 onTap: () {},
               ),
             ]),
+
+            const SizedBox(height: 10),
+
+            _buildLogoutTile(context),
           ],
         ),
       ),
@@ -160,14 +193,7 @@ class SettingsView extends StatelessWidget {
     );
   }
 
-  Widget _buildTile(
-      BuildContext context, {
-        required IconData icon,
-        required String title,
-        required String subtitle,
-        Widget? trailing,
-        VoidCallback? onTap,
-      }) {
+  Widget _buildTile(BuildContext context, { required IconData icon, required String title, required String subtitle, Widget? trailing, VoidCallback? onTap }) {
     final color = Theme.of(context).colorScheme.primary.withAlpha((0.1 * 255).toInt());
 
     return ListTile(
@@ -184,6 +210,261 @@ class SettingsView extends StatelessWidget {
       title: Text(title, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600)),
       subtitle: Text(subtitle, style: Theme.of(context).textTheme.bodySmall),
       trailing: trailing ?? const Icon(Icons.chevron_right, color: Colors.grey),
+    );
+  }
+
+  Widget _buildLogoutTile(BuildContext context) {
+    final authController = Get.find<AuthController>();
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha((0.05 * 255).toInt()),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: ListTile(
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Get.theme.cardColor.withAlpha((0.2 * 255).toInt()),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(Icons.logout_sharp, color: Colors.white, size: 20),
+        ),
+        title: Text("logout".tr, style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600, color: Colors.white)),
+        onTap: () {
+          Get.defaultDialog(
+            radius: 10,
+            contentPadding: const EdgeInsets.all(20),
+            titlePadding: const EdgeInsets.only(top: 20),
+            title: "logout".tr,
+            titleStyle: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            content: Text("logout_confirmation".tr, style: Get.textTheme.bodyMedium),
+            cancel: ElevatedButton(
+              onPressed: () async {
+                authController.logout();
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+              child: Center(
+                child: Text("logout".tr, style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Colors.white)),
+              ),
+            ),
+            confirm: ElevatedButton(
+              onPressed: () {
+                Get.back();
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).focusColor),
+              child: Center(child: Text("cancel".tr, style: Theme.of(context).textTheme.labelMedium)),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void showLanguageBottomSheet() {
+    Get.bottomSheet(
+      SafeArea(
+        bottom: true,
+        child: Obx(() => Container(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 15),
+          decoration: BoxDecoration(
+            color: Get.theme.scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 15),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+              ),
+              Text("select_language".tr, style: Get.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: Get.height * 0.5,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Get.theme.cardColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: List.generate(SettingsView.languages.length, (index) {
+                      final lang = SettingsView.languages[index];
+                      final isLast = index == SettingsView.languages.length - 1;
+
+                      return Column(
+                        children: [
+                          ListTile(
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(2),
+                              child: Flag.fromCode(
+                                lang['code'] as FlagsCode,
+                                width: 30,
+                                height: 20,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(lang['name'] as String),
+                                Text((lang['nameKey'] as String).tr, style: Get.textTheme.labelMedium?.copyWith(color: Colors.grey)),
+                              ],
+                            ),
+                            trailing: Radio<String>(
+                              value: lang['name'] as String,
+                              groupValue: settingController.selectedLanguage.value,
+                              onChanged: (value) {
+                                if (value != null) {
+                                  settingController.setLanguage(value);
+                                  Get.updateLocale(lang['locale'] as Locale);
+                                }
+                              },
+                            ),
+                            onTap: () {
+                              settingController.setLanguage(lang['name'] as String);
+                              Get.updateLocale(lang['locale'] as Locale);
+                            },
+                          ),
+                          if (!isLast) const Divider(height: 1),
+                        ],
+                      );
+                    }),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  void showClearCacheBottomSheet() {
+    Get.bottomSheet(
+      SafeArea(
+        bottom: true,
+        child: Container(
+          padding: EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 15),
+          decoration: BoxDecoration(
+            color: Get.theme.scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+            border: Border.all(color: Theme.of(context).dividerColor.withAlpha(100)),
+          ),
+          child: Wrap(
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 15),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[400],
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+              ),
+
+              // Title
+              Center(
+                child: Text("clear_caches".tr, style: Get.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(height: 40),
+
+              // Message
+              Center(
+                child: Text("clear_caches_confirmation".tr, style: Get.textTheme.bodyMedium),
+              ),
+              const SizedBox(height: 40),
+
+              // Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: Text("cancel".tr, style: Get.textTheme.labelMedium),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Get.back();
+                        Get.snackbar(
+                            '', '',
+                            titleText: Center(
+                              child: Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).scaffoldBackgroundColor,
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.layers_clear_sharp, color: Theme.of(context).dividerColor, size: 18),
+                                    SizedBox(width: 8),
+                                    Text('caches_cleared'.tr, style: TextStyle(color: Theme.of(context).dividerColor)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            maxWidth: Get.width * .9,
+                            backgroundColor: Colors.transparent,
+                            snackPosition: SnackPosition.TOP,
+                            snackStyle: SnackStyle.FLOATING,
+                            padding: EdgeInsets.zero,
+                            duration: const Duration(milliseconds: 1500),
+                            isDismissible: false,
+                            animationDuration: const Duration(milliseconds: 200),
+                            overlayBlur: 0.0,
+                            barBlur: 0.0,
+                            boxShadows: [],
+                            overlayColor: Colors.transparent
+                        );
+                        settingController.clearStorage();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                      ),
+                      child: Text("clear".tr, style: Get.textTheme.labelMedium?.copyWith(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ),
+      ),
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
     );
   }
 }

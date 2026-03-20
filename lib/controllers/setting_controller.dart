@@ -50,7 +50,7 @@ class SettingController extends GetxController {
     saturation.value = box.read(StorageKeys.saturation) ?? 1.0;
     contrast.value = box.read(StorageKeys.contrast) ?? 1.0;
     fontSize.value = box.read(StorageKeys.fontSize) ?? 1.0;
-    selectedLanguage.value = box.read(StorageKeys.selectedLanguage) ?? 'Khmer';
+    selectedLanguage.value = box.read(StorageKeys.selectedLanguage) ?? 'English';
     inAppNotifications.value = box.read(StorageKeys.inAppNotifications) ?? true;
 
     // Listen to system brightness changes
