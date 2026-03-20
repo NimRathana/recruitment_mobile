@@ -19,10 +19,10 @@ const Color discordLightHint = Color(0xFF5C6370);
 const Color discordDarkHint = Color(0xFF949BA4);
 const Color discordDarkLabel = Color(0xFFB5BAC1);
 final double fontSizeScale = settingController.fontSize.value;
-final contrast = settingController.contrast.value;
-final saturation = settingController.saturation.value;
 
 ThemeData lightTheme([Color? primaryColor]) {
+  final contrast = settingController.contrast.value;
+  final saturation = settingController.saturation.value;
   final baseTextTheme = defaultTextTheme();
   final Color primaryLight = settingController.box.hasData(StorageKeys.selectedColor) ? settingController.selectedColor.value : lightBg;
 
@@ -86,6 +86,8 @@ ThemeData lightTheme([Color? primaryColor]) {
 }
 
 ThemeData darkTheme([Color? primaryColor]) {
+  final contrast = settingController.contrast.value;
+  final saturation = settingController.saturation.value;
   final baseTextTheme = defaultTextTheme();
   final Color primaryDark = settingController.box.hasData(StorageKeys.selectedColor) ? settingController.selectedColor.value.withAlpha(100) : discordDarkBg;
 
