@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:recruitment_mobile/shared/constants.dart';
@@ -14,6 +15,7 @@ import 'routes/app_routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env.dev");
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp
   ]);
@@ -34,7 +36,6 @@ class MyApp extends StatelessWidget {
     final selectedColor = settingController.selectedColor.value;
     return Obx(() {
       return GetMaterialApp(
-        title: 'Recruitment App',
         debugShowCheckedModeBanner: false,
         initialBinding: AuthBinding(),
         initialRoute: firstPage,

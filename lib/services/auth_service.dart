@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const baseUrl = "http://192.168.18.11:8000";
+  static final baseUrl = dotenv.env['API_URL'] ?? "http://192.168.18.11:8000";
 
   static Future<String?> login(String username, String password) async {
     try {
