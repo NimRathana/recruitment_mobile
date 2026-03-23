@@ -1,4 +1,4 @@
-name: Flutter CI
+name: Recruitment App CI/CD
 
 on:
   push:
