@@ -98,23 +98,14 @@ class HomeView extends StatelessWidget {
           label: isLogout ? null : item.title.tr,
           selectable: !isLogout,
           iconBuilder: isLogout ? (selected, hovered) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              width: _sidebarController.extended ? 230 : 60,
-              decoration: BoxDecoration(
-                color: Colors.red.withAlpha((0.5 * 255).toInt()),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.red.withValues(alpha: 0.2)),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.exit_to_app_rounded, color: Colors.white70),
-                  if (_sidebarController.extended) ...[
-                    const SizedBox(width: 20),
-                    Text('logout'.tr, style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
-                  ],
+            return Row(
+              children: [
+                Icon(Icons.exit_to_app_rounded, color: Colors.red),
+                if (_sidebarController.extended) ...[
+                  const SizedBox(width: 20),
+                  Text('logout'.tr, style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
                 ],
-              ),
+              ],
             );
           } : null,
           onTap: () {
@@ -211,13 +202,12 @@ SidebarXTheme getSidebarXStyle(BuildContext context, {bool extended = false}) {
       color: isDark ? discordDarkLabel : const Color(0xFF4E5058),
       fontSize: 14 * scale,
     ),
-    // itemPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    itemPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     itemTextPadding: const EdgeInsets.only(left: 20),
 
     // --- Selected Style ---
-    // selectedItemMargin: EdgeInsets.symmetric(horizontal: 0),
     selectedTextStyle: TextStyle(color: Colors.teal, fontWeight: FontWeight.bold, fontSize: 14 * scale),
-    // selectedItemPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    selectedItemPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
     selectedItemTextPadding: const EdgeInsets.only(left: 20),
     selectedIconTheme: const IconThemeData(size: 24, color: Colors.teal),
     selectedItemDecoration: BoxDecoration(
