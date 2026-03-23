@@ -45,7 +45,12 @@ jobs:
 
       # 7️⃣ Optional: Build Web
       - name: Build Web (Optional)
-        run: flutter build web --release
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/web
+          publish_branch: develop
+          cname: nimrathana11.com
 
       # 8️⃣ Upload APK artifact
       - name: Upload APK artifact
