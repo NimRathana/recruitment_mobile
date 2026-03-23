@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/setting_controller.dart';
 import '../../routes/app_routes.dart';
-import '../../utils/helper.dart';
+import '../../core/utils/helper.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});

@@ -3,15 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:recruitment_mobile/shared/constants.dart';
-import 'package:recruitment_mobile/storage/storage_keys.dart';
+import 'package:recruitment_mobile/core/constants/storage_keys.dart';
 import 'package:recruitment_mobile/views/bottom_navigation/settings_view.dart';
 import 'bindings/auth_binding.dart';
 import 'controllers/setting_controller.dart';
+import 'core/themes/app_theme.dart';
 import 'translate/AppTranslations.dart';
-import 'views/bottom_navigation/appearance_view.dart';
-import 'views/login_view.dart';
-import 'views/home_view.dart';
 import 'routes/app_routes.dart';
 
 void main() async {
@@ -48,11 +45,7 @@ class MyApp extends StatelessWidget {
         themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
         theme: lightTheme(selectedColor),
         darkTheme: darkTheme(selectedColor),
-        getPages: [
-          GetPage(name: Routes.login, page: () => LoginView()),
-          GetPage(name: Routes.home, page: () => HomeView()),
-          GetPage(name: Routes.appearance, page: () => AppearanceView()),
-        ],
+        getPages: AppPages.routes,
       );
     });
   }

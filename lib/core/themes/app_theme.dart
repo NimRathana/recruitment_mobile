@@ -1,23 +1,23 @@
 // ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/setting_controller.dart';
-import '../storage/storage_keys.dart';
+import '../../controllers/setting_controller.dart';
+import '../constants/storage_keys.dart';
 
 SettingController settingController = Get.find<SettingController>();
 const Color firstMainThemeColor = Colors.teal;
 
-const Color discordDarkBg = Color(0xFF313338);
-const Color discordDarkSurface = Color(0xFF2B2D31);
-const Color discordDarkDeep = Color(0xFF1E1F22);
-const Color discordDarkText = Color(0xFFDBDEE1);
+const Color darkBg = Color(0xFF313338);
+const Color darkSurface = Color(0xFF2B2D31);
+const Color darkDeep = Color(0xFF1E1F22);
+const Color darkText = Color(0xFFDBDEE1);
 final Color lightBg = const Color(0xFFF2F3F5);
 final Color lightSurface = Colors.white;
 // text field
-const Color discordLightDeep = Color(0xFFEBEDEF);
-const Color discordLightHint = Color(0xFF5C6370);
-const Color discordDarkHint = Color(0xFF949BA4);
-const Color discordDarkLabel = Color(0xFFB5BAC1);
+const Color lightDeep = Color(0xFFEBEDEF);
+const Color lightHint = Color(0xFF5C6370);
+const Color darkHint = Color(0xFF949BA4);
+const Color darkLabel = Color(0xFFB5BAC1);
 final double fontSizeScale = settingController.fontSize.value;
 
 ThemeData lightTheme([Color? primaryColor]) {
@@ -40,7 +40,7 @@ ThemeData lightTheme([Color? primaryColor]) {
       backgroundColor: adjustColor(lightBg, contrast, saturation),
       foregroundColor: Colors.black,
       elevation: 0,
-      centerTitle: false, // Discord style is left-aligned
+      centerTitle: false,
     ),
     cardTheme: CardThemeData(
       color: adjustColor(lightSurface, contrast, saturation),
@@ -56,10 +56,10 @@ ThemeData lightTheme([Color? primaryColor]) {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: discordLightDeep,
+      fillColor: lightDeep,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       hintStyle: TextStyle(
-        color: discordLightHint,
+        color: lightHint,
         fontSize: 14 * fontSizeScale,
       ),
       border: OutlineInputBorder(
@@ -89,21 +89,21 @@ ThemeData darkTheme([Color? primaryColor]) {
   final contrast = settingController.contrast.value;
   final saturation = settingController.saturation.value;
   final baseTextTheme = defaultTextTheme();
-  final Color primaryDark = settingController.box.hasData(StorageKeys.selectedColor) ? settingController.selectedColor.value.withAlpha(100) : discordDarkBg;
+  final Color primaryDark = settingController.box.hasData(StorageKeys.selectedColor) ? settingController.selectedColor.value.withAlpha(100) : darkBg;
 
   return ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    scaffoldBackgroundColor: adjustColor(discordDarkBg, contrast, saturation),
+    scaffoldBackgroundColor: adjustColor(darkBg, contrast, saturation),
     colorScheme: ColorScheme.fromSeed(
       seedColor: settingController.selectedColor.value,
       brightness: Brightness.dark,
-      surface: adjustColor(discordDarkSurface, contrast, saturation),
-      onSurface: adjustColor(discordDarkText, contrast, saturation),
+      surface: adjustColor(darkSurface, contrast, saturation),
+      onSurface: adjustColor(darkText, contrast, saturation),
     ),
-    textTheme: applyContrastToTextTheme(baseTextTheme, discordDarkText, contrast, saturation),
+    textTheme: applyContrastToTextTheme(baseTextTheme, darkText, contrast, saturation),
     appBarTheme: AppBarTheme(
-      backgroundColor: adjustColor(discordDarkBg, contrast, saturation),
+      backgroundColor: adjustColor(darkBg, contrast, saturation),
       foregroundColor: Colors.white,
       elevation: 0,
       scrolledUnderElevation: 1,
@@ -114,12 +114,12 @@ ThemeData darkTheme([Color? primaryColor]) {
       ),
     ),
     cardTheme: CardThemeData(
-      color: adjustColor(discordDarkSurface, contrast, saturation),
+      color: adjustColor(darkSurface, contrast, saturation),
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: adjustColor(discordDarkDeep, contrast, saturation),
+      backgroundColor: adjustColor(darkDeep, contrast, saturation),
       selectedItemColor: Colors.white,
       unselectedItemColor: const Color(0xFF949BA4),
       type: BottomNavigationBarType.fixed,
@@ -134,10 +134,10 @@ ThemeData darkTheme([Color? primaryColor]) {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: discordDarkDeep,
+      fillColor: darkDeep,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       hintStyle: TextStyle(
-        color: discordDarkHint,
+        color: darkHint,
         fontSize: 14 * fontSizeScale,
       ),
       border: OutlineInputBorder(
@@ -156,7 +156,7 @@ ThemeData darkTheme([Color? primaryColor]) {
         ),
       ),
       labelStyle: const TextStyle(
-        color: discordDarkLabel,
+        color: darkLabel,
         fontWeight: FontWeight.w600,
       ),
     ),

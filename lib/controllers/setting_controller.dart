@@ -1,8 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../shared/constants.dart';
-import '../storage/storage_keys.dart';
+import '../core/themes/app_theme.dart';
+import '../core/constants/storage_keys.dart';
 import 'package:get_storage/get_storage.dart';
 
 class SettingController extends GetxController {

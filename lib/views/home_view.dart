@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sidebarx/sidebarx.dart';
 import '../controllers/auth_controller.dart';
-import '../shared/constants.dart';
+import '../core/themes/app_theme.dart';
 import 'bottom_navigation/settings_view.dart';
-import 'package:recruitment_mobile/utils/helper.dart';
+import 'package:recruitment_mobile/core/utils/helper.dart';
 
 class NavItem {
   final String title;
@@ -41,6 +41,10 @@ class HomeView extends StatelessWidget {
       title: "Setting",
       icon: Icons.settings_rounded,
       page: SettingsView(),
+    ),
+    NavItem(
+      title: "Component",
+      icon: Icons.widgets_rounded,
     ),
     NavItem(
       title: "logout",
@@ -181,7 +185,7 @@ SidebarXTheme getSidebarXStyle(BuildContext context, {bool extended = false}) {
   final double contrast = settingController.contrast.value;
   final double saturation = settingController.saturation.value;
 
-  final Color bgColor = isDark ? adjustColor(discordDarkDeep, contrast, saturation) : adjustColor(discordLightDeep, contrast, saturation);
+  final Color bgColor = isDark ? adjustColor(darkDeep, contrast, saturation) : adjustColor(lightDeep, contrast, saturation);
 
   return SidebarXTheme(
     width: extended ? 260 : 70,
@@ -200,9 +204,9 @@ SidebarXTheme getSidebarXStyle(BuildContext context, {bool extended = false}) {
       ],
     ),
     // --- Unselected Style ---
-    iconTheme: IconThemeData(size: 24, color: isDark ? discordDarkHint : discordLightHint),
+    iconTheme: IconThemeData(size: 24, color: isDark ? darkHint : lightHint),
     textStyle: TextStyle(
-      color: isDark ? discordDarkLabel : const Color(0xFF4E5058),
+      color: isDark ? darkLabel : const Color(0xFF4E5058),
       fontSize: 14 * scale,
     ),
     itemPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

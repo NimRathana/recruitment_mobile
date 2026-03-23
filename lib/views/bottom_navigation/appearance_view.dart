@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import '../../controllers/setting_controller.dart';
-import '../../utils/helper.dart';
+import '../../core/utils/helper.dart';
 
 class AppearanceView extends StatefulWidget {
   const AppearanceView({super.key});
