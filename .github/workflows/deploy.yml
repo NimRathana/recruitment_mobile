@@ -40,14 +40,14 @@ jobs:
           fi
 
       # 6️⃣ Build APK for Android
-      - name: Build APK (Android)
-        run: flutter build apk --release
+      # - name: Build APK (Android)
+      #   run: flutter build apk --release
 
       # 7️⃣ Optional: Build Web
       - name: Build Web (Optional)
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_PAT }}
           publish_dir: build/web
           publish_branch: develop
           cname: nimrathana11.com
