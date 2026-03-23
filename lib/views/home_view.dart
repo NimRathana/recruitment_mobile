@@ -101,10 +101,13 @@ class HomeView extends StatelessWidget {
             return Row(
               children: [
                 Icon(Icons.exit_to_app_rounded, color: Colors.red),
-                if (_sidebarController.extended) ...[
-                  const SizedBox(width: 20),
-                  Text('logout'.tr, style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
-                ],
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 200),
+                  child: _sidebarController.extended ? Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Text('logout'.tr, style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                  ) : const SizedBox.shrink(),
+                ),
               ],
             );
           } : null,
@@ -181,7 +184,7 @@ SidebarXTheme getSidebarXStyle(BuildContext context, {bool extended = false}) {
   final Color bgColor = isDark ? adjustColor(discordDarkDeep, contrast, saturation) : adjustColor(discordLightDeep, contrast, saturation);
 
   return SidebarXTheme(
-    width: extended ? 260 : 90,
+    width: extended ? 260 : 70,
     decoration: BoxDecoration(
       color: bgColor,
       borderRadius: const BorderRadius.only(
