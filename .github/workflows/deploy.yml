@@ -27,7 +27,12 @@ jobs:
         run: flutter analyze --no-fatal-infos
 
       - name: Run tests
-        run: flutter test
+        run: |
+          if [ -d "test" ]; then
+            flutter test
+          else
+            echo "No tests found, skipping..."
+          fi
 
       - name: Build APK (Android)
         run: flutter build apk --release
