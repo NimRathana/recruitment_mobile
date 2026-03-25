@@ -50,7 +50,7 @@ jobs:
       # 4️⃣ Build Flutter web
       - name: Build Flutter Web
         # working-directory: recruitment_mobile
-        run: flutter build web
+        run: flutter build web --base-href /recruitment_mobile/
 
       # 7️⃣ Build Web
       - name: Build Web
