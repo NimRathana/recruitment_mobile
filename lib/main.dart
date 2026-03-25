@@ -15,7 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   const env = String.fromEnvironment('ENV', defaultValue: 'dev');
   await dotenv.load(
-    fileName: env == 'prod' ? '.env.prod' : '.env.develop',
+    fileName: env == 'prod' ? '.env.prod' : '.env.dev',
   );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp
