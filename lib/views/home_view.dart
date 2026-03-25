@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:recruitment_mobile/views/widgets/custom_textfield.dart';
 import 'package:sidebarx/sidebarx.dart';
 import '../controllers/auth_controller.dart';
 import '../core/themes/app_theme.dart';
 import 'bottom_navigation/settings_view.dart';
 import 'package:recruitment_mobile/core/utils/helper.dart';
+import 'chat_view.dart';
 
 class NavItem {
   final String title;
   final IconData icon;
   final Widget? page;
+  final bool showInBottomBar;
   final VoidCallback? onTap;
 
   const NavItem({
@@ -17,68 +20,100 @@ class NavItem {
     required this.icon,
     this.page,
     this.onTap,
+    this.showInBottomBar = false
   });
 }
 
 class HomeView extends StatelessWidget {
-  HomeView({super.key});
+  HomeView({super.key}) {
+    sidebarItems = [
+      NavItem(
+        title: "Dashboard",
+        icon: Icons.dashboard_rounded,
+        page: _DashboardPage(),
+        showInBottomBar: true,
+      ),
+      NavItem(
+        title: "Profile",
+        icon: Icons.person_rounded,
+        page: _ProfilePage(),
+        showInBottomBar: true,
+      ),
+      NavItem(
+        title: "Setting",
+        icon: Icons.settings_rounded,
+        page: SettingsView(),
+        showInBottomBar: true,
+      ),
+      NavItem(
+        title: "Chat",
+        icon: Icons.chat_rounded,
+        page: ChatView(scaffoldKey: _scaffoldKey),
+      ),
+      NavItem(
+        title: "logout",
+        icon: Icons.logout,
+        onTap: () {
+          Helper.showLogoutDialog(Get.context!);
+        },
+      ),
+    ];
 
+    bottomNavItems = sidebarItems.where((item) => item.showInBottomBar).toList();
+  }
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final controller = Get.find<AuthController>();
   final _sidebarController = SidebarXController(selectedIndex: 0, extended: true);
   final RxInt _selectedIndex = 0.obs;
-  final List<NavItem> sidebarItems = [
-    NavItem(
-      title: "Dashboard",
-      icon: Icons.dashboard_rounded,
-      page: _DashboardPage(),
-    ),
-    NavItem(
-      title: "Profile",
-      icon: Icons.person_rounded,
-      page: _ProfilePage(),
-    ),
-    NavItem(
-      title: "Setting",
-      icon: Icons.settings_rounded,
-      page: SettingsView(),
-    ),
-    NavItem(
-      title: "Component",
-      icon: Icons.widgets_rounded,
-    ),
-    NavItem(
-      title: "logout",
-      icon: Icons.logout,
-      onTap: (){
-        Helper.showLogoutDialog(Get.context!);
-      }
-    ),
-  ];
-  late final List<NavItem> bottomNavItems = sidebarItems.take(3).toList();
+  late final List<NavItem> sidebarItems;
+  late final List<NavItem> bottomNavItems;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: Obx(() => Helper.sampleAppBar(bottomNavItems[_selectedIndex.value].title.tr, context, null)),
+        child: Obx(() {
+          final item = sidebarItems[_selectedIndex.value];
+          if (item.title == "Chat") {
+            return const SizedBox.shrink();
+          }
+          return Helper.sampleAppBar(
+            item.title.tr,
+            context,
+            null,
+          );
+        }),
       ),
       body: Obx(() => sidebarItems[_selectedIndex.value].page!),
       drawer: _buildSidebar(context),
-      bottomNavigationBar: Obx(() => BottomNavigationBar(
-        currentIndex: _selectedIndex.value,
-        onTap: (index) {
-          _selectedIndex.value = index;
-          _sidebarController.selectIndex(index);
-        },
-        items: bottomNavItems.map((item) {
-          return BottomNavigationBarItem(
-            icon: Icon(item.icon),
-            label: item.title.tr,
-          );
-        }).toList(),
-      ),
-      ),
+      bottomNavigationBar: Obx(() {
+        final currentItem = sidebarItems[_selectedIndex.value];
+        if (!currentItem.showInBottomBar || bottomNavItems.length < 2) {
+          return const SizedBox.shrink();
+        }
+
+        int currentIndex = bottomNavItems.indexOf(currentItem);
+        if (currentIndex == -1) currentIndex = 0;
+
+        return BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: (index) {
+            final selectedItem = bottomNavItems[index];
+            final realIndex = sidebarItems.indexOf(selectedItem);
+            _selectedIndex.value = realIndex;
+            _sidebarController.selectIndex(realIndex);
+          },
+          items: bottomNavItems.map((item) {
+            return BottomNavigationBarItem(
+              icon: Icon(item.icon),
+              label: item.title.tr,
+            );
+          }).toList(),
+        );
+      }),
     );
   }
 
@@ -232,6 +267,7 @@ class _DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = Get.find<AuthController>();
+    TextEditingController textController = TextEditingController();
     return Padding(
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -241,11 +277,11 @@ class _DashboardPage extends StatelessWidget {
           const SizedBox(height: 20),
           _TokenCard(token: auth.token),
           const SizedBox(height: 20),
-          TextField(
-            decoration: InputDecoration(
-              hintText: "Enter message...",
-            ),
-          ),
+          CustomTextField.buildTextField(
+            context: context,
+            controller: textController,
+            labelText: "Enter Message...",
+          )
         ],
       ),
     );
