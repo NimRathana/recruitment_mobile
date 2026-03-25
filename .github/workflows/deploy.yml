@@ -49,7 +49,7 @@ jobs:
 
       # 4️⃣ Build Flutter web
       - name: Build Flutter Web
-        working-directory: recruitment_mobile
+        # working-directory: recruitment_mobile
         run: flutter build web
 
       # 7️⃣ Build Web
@@ -57,7 +57,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GH_PAT }}
-          publish_dir: recruitment_mobile/build/web
+          publish_dir: build/web
           publish_branch: develop
           # cname: https://nimrathana.github.io/recruitment_mobile/
 
@@ -73,4 +73,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: web-build
-          path: recruitment_mobile/build/web
+          path: build/web
