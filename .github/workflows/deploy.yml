@@ -52,7 +52,7 @@ jobs:
         working-directory: recruitment_mobile
         run: flutter build web
 
-      # 7️⃣ Optional: Build Web
+      # 7️⃣ Build Web
       - name: Build Web
         uses: peaceiris/actions-gh-pages@v4
         with:
