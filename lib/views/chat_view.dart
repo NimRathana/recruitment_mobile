@@ -98,9 +98,7 @@ class ChatView extends StatelessWidget {
                               ),
                               child: CircleAvatar(
                                 radius: 32,
-                                backgroundImage: NetworkImage(
-                                  "https://i.pravatar.cc/150?u=active$index",
-                                ),
+                                backgroundImage: NetworkImage("https://i.pravatar.cc/150?u=active$index"),
                               ),
                             ),
                             if (isActive)

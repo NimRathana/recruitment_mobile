@@ -50,7 +50,7 @@ jobs:
           github_token: ${{ secrets.GH_PAT }}
           publish_dir: build/web
           publish_branch: develop
-          cname: nimrathana11.com
+          cname: nimrathana.github.io/recruitment_mobile
 
       # 8️⃣ Upload APK artifact
       - name: Upload APK artifact
