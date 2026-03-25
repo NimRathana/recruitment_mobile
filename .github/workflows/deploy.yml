@@ -10,6 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      # Force Node.js 24 for deprecated actions
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       # 1️⃣ Checkout repo
       - name: Checkout repository
@@ -50,7 +54,7 @@ jobs:
           github_token: ${{ secrets.GH_PAT }}
           publish_dir: build/web
           publish_branch: develop
-          cname: nimrathana.github.io/recruitment_mobile
+          cname: nim-rathana11.10001mb.com
 
       # 8️⃣ Upload APK artifact
       - name: Upload APK artifact
