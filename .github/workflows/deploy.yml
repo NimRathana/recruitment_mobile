@@ -62,11 +62,11 @@ jobs:
           # cname: https://nimrathana.github.io/recruitment_mobile/
 
       # 8️⃣ Upload APK artifact
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release.apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+      # - name: Upload APK artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: app-release.apk
+      #     path: build/app/outputs/flutter-apk/app-release.apk
 
       # 9️⃣ Upload Web artifact (Optional)
       - name: Upload Web artifact
