@@ -29167,7 +29167,7 @@ var $async$a7F=A.Q(function(a,b){if(a===1)return A.M(b,r)
 for(;;)switch(s){case 0:if($.X==null)A.yP()
 $.X.toString
 s=2
-return A.S($.aMX().x0(0,".env.dev"),$async$a7F)
+return A.S($.aMX().x0(0,".env.prod"),$async$a7F)
 case 2:A.atq(A.b([B.L2],t.UW))
 if($.X==null)A.yP()
 $.X.toString
