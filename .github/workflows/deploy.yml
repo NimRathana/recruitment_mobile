@@ -73,4 +73,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: web-build
-          path: build/web
+          path: recruitment_mobile/build/web
