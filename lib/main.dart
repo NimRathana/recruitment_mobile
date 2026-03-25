@@ -13,7 +13,10 @@ import 'routes/app_routes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env.dev");
+  const env = String.fromEnvironment('ENV', defaultValue: 'dev');
+  await dotenv.load(
+    fileName: env == 'prod' ? '.env.prod' : '.env.develop',
+  );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp
   ]);

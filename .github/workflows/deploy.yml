@@ -49,7 +49,6 @@ jobs:
 
       # 4️⃣ Build Flutter web
       - name: Build Flutter Web
-        # working-directory: recruitment_mobile
         run: flutter build web --base-href /recruitment_mobile/ --dart-define=ENV=prod
 
       # 7️⃣ Build Web
@@ -59,7 +58,6 @@ jobs:
           github_token: ${{ secrets.GH_PAT }}
           publish_dir: build/web
           publish_branch: develop
-          # cname: https://nimrathana.github.io/recruitment_mobile/
 
       # 8️⃣ Upload APK artifact
       # - name: Upload APK artifact
